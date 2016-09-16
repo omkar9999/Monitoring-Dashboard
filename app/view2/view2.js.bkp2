@@ -1,0 +1,75 @@
+'use strict';
+
+var uid = 1;
+
+var sampleApp = angular.module('myApp.view2', ['ngRoute']);
+
+sampleApp.config(['$routeProvider', function($routeProvider) {
+  $routeProvider.when('/view2', {
+    templateUrl: 'view2/view2.html',
+    controller: 'View2Ctrl'
+  });
+}]);
+
+sampleApp.controller('View2Ctrl', function($scope) {
+             $scope.contacts = [
+        { id:0, 'name': 'Viral', 
+          'email':'hello@gmail.com', 
+          'phone': '123-2343-44'
+        }
+    ];
+
+$scope.newcontact = {};
+
+
+  $scope.saveContact = function() {
+        
+        if($scope.newcontact.id == null) {
+		//if this is new contact, add it in contacts array
+		$scope.newcontact.id = uid++;
+		$scope.contacts.push($scope.newcontact);
+        } else {
+		//for existing contact, find this contact using id
+		//and update it.
+		for(i in $scope.contacts) {
+		    if($scope.contacts[i].id == $scope.newcontact.id) {
+			$scope.contacts[i] = $scope.newcontact;
+		    }
+		}                
+        }
+        
+        //clear the add contact form
+        $scope.newcontact = {};
+    }
+
+    
+    /*$scope.delete = function(id) {
+        
+        //search contact with given id and delete it
+        //for(i in $scope.contacts) {
+        for (var i = 0; i < $scope.contacts.length; i++){
+            if($scope.contacts[i].id == id) {
+                $scope.contacts.splice(i,1);
+                $scope.newcontact = {};
+            }
+        }
+        
+    }
+    
+    
+    $scope.edit = function(id) {
+     console.log($scope.contacts);
+    console.log(id);
+	//search contact with given id and update it
+for (var i = 0; i < $scope.contacts.length; i++){
+//        for(i in $scope.contacts) {
+            if($scope.contacts[i].id == id) {
+            	//we use angular.copy() method to create 
+            	//copy of original object
+                $scope.newcontact = angular.copy($scope.contacts[i]);
+console.log($scope.newcontact);
+            }
+        }
+    }*/
+
+});

@@ -14,8 +14,19 @@ App.config(['$routeProvider', function($routeProvider) {
     $scope.inputCounter = 0;   
 
      $scope.inputs = [{
-      id: 'input'
+      id: 'input',
+      url : '',
+      mins : ''
      }];
+
+$scope.submitMyForm=function(){ 
+/* while compiling form , angular created this object*/ 
+var data=$scope.myForm; 
+console.log(data);
+/* post to server*/ 
+//$http.post(url, data); 
+} 
+
    
     $scope.add = function() {
       $scope.inputTemplate = {
@@ -25,6 +36,14 @@ App.config(['$routeProvider', function($routeProvider) {
       $scope.inputCounter += 1;
       $scope.inputs.push($scope.inputTemplate);
     };
+ 
+      
+    $scope.save = function() {
+        console.log('Saved');
+         var data=angular.toJson($scope.inputs); 
+        console.log(data);
+    };
+ 
 
     $scope.remove = function(id) {
       console.log(id);
@@ -83,12 +102,3 @@ $mdDialog.show(
   }
 ])
 
-/*App.directive('removeOnClick', function() {
-    return {
-        link: function(scope, elt, attrs) {
-            scope.remove = function() {
-                elt.html('');
-            };
-        }
-    }
-});*/

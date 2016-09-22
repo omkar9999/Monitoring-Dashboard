@@ -16,7 +16,8 @@ App.config(['$routeProvider', function($routeProvider) {
      $scope.inputs = [{
       id: 'input',
       url : '',
-      mins : ''
+      scheduledMin : '',
+      typeOfOperation : "GET"
      }];
 
 $scope.submitMyForm=function(){ 
@@ -31,7 +32,8 @@ console.log(data);
     $scope.add = function() {
       $scope.inputTemplate = {
         id: 'input-' + $scope.inputCounter,
-        name: ''
+        name: '',
+        typeOfOperation : "GET"
       };
       $scope.inputCounter += 1;
       $scope.inputs.push($scope.inputTemplate);
@@ -40,9 +42,19 @@ console.log(data);
       
     $scope.save = function() {
         console.log('Saved');
-         var data=angular.toJson($scope.inputs); 
+         //var data=angular.toJson($scope.inputs); 
+        var services = { services : $scope.inputs};
+        var data =angular.toJson(services);
         console.log(data);
-    };
+var config = {headers: {'Content-Type': 'application/json'}};
+//TODO Change the below url get it from User self link
+$http.patch("http://localhost:8080/user/57e3bc72bed7b1c65671bbc3",data,config).success(function(response) {
+      console.log(response.data);
+     
+    }).error(function() {
+         console.log('error') })         
+
+};
  
 
     $scope.remove = function(id) {

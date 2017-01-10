@@ -6,12 +6,12 @@
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
 </head>
 
-<body ng-controller="View2Ctrl">
+<body ng-controller="View2Ctrl" >
     
        <fieldset id="fields-list">
 
-
-    <div class="pure-g entry" ng-repeat="input in inputs track by input['id']">
+    <div ng-init="loadUserData()">
+    <div class="pure-g entry" ng-repeat="input in inputs track by $index" >
       <div class="pure-u-1-5" layout-gt-sm="row">
 <form name="myForm" novalidate"> 
 <md-input-container class="md-block pure-input-1" id="input" name="input-1" required>
@@ -23,12 +23,12 @@
             <input class ="form-control" ng-model="input.scheduledMin" placeholder="30" ng-pattern="/^[0-9]$/" md-maxlength="2" /> 
 
 <md-button ng-click="loading(input.url)">Test Now</md-button>
-<md-button ng-click="remove(input['id'])">delete</md-button>
+<md-button ng-click="remove($index)">delete</md-button>
 <md-progress-circular md-mode="indeterminate" ng-show="isLoading"></md-progress-circular>
       </div>
 
       </div>
-
+      </div>
 
     </div>
   </fieldset>

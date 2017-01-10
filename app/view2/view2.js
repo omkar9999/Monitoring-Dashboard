@@ -9,7 +9,7 @@ App.config(['$routeProvider', function($routeProvider) {
 }])
 .controller('View2Ctrl', ['$scope','$http','$mdDialog',
   function($scope, $http, $mdDialog) {
-
+    console.log('Ctrl2 called');
     $scope.loading=true;
     $scope.inputCounter = 0;   
 
@@ -31,7 +31,7 @@ console.log(data);
    
     $scope.add = function() {
       $scope.inputTemplate = {
-        id: 'input-' + $scope.inputCounter,
+        id: 'inputs' + $scope.inputCounter,
         name: '',
         typeOfOperation : "GET"
       };
@@ -39,7 +39,17 @@ console.log(data);
       $scope.inputs.push($scope.inputTemplate);
     };
  
-      
+    $scope.loadUserData = function() {
+       $http.get("http://localhost:8080/user/5874961fca906070e195a750").success(function(response)  {
+       console.log('Initializing User Data');
+       console.log(response);
+       console.log(response.services);
+       $scope.inputs = response.services;   
+   }).error(function() {
+         console.log('error in getting User Details') })     
+
+    };      
+
     $scope.save = function() {
         console.log('Saved');
          //var data=angular.toJson($scope.inputs); 
@@ -48,7 +58,7 @@ console.log(data);
         console.log(data);
 var config = {headers: {'Content-Type': 'application/json'}};
 //TODO Change the below url get it from User self link
-$http.patch("http://localhost:8080/user/57e3bc72bed7b1c65671bbc3",data,config).success(function(response) {
+$http.patch("http://localhost:8080/user/5874961fca906070e195a750",data,config).success(function(response) {
       console.log(response.data);
      
     }).error(function() {
@@ -59,14 +69,10 @@ $http.patch("http://localhost:8080/user/57e3bc72bed7b1c65671bbc3",data,config).s
 
     $scope.remove = function(id) {
       console.log(id);
-      for (var i = 0; i < $scope.inputs.length; i++){
-        console.log($scope.inputs[i].id);
-             console.log('$scope.inputs'+$scope.inputs.length);
-            if($scope.inputs[i].id == id) {
-                $scope.inputs.splice(i,1);                
+            if (id > -1) { 
+                $scope.inputs.splice(id,1);                
             }
-             console.log('$scope.inputs'+$scope.inputs.length);
-        }
+             console.log('$scope.inputs'+$scope.inputs.length);        
  };
 
     $scope.loading = function(url) {

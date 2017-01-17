@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.23/angular.min.js"></script>
+</head>
+
+<body ng-controller="testCtrl" >
+  
+  <md-content class="content" class="md-padding">
+     <md-toolbar md-scroll-shrink>
+    <div class="md-toolbar-tools">Monitoring Tool</div>
+  </md-toolbar>
+         <md-toolbar class="md-warn" ng-show="loginError">
+    <h1 class="md-toolbar-tools">
+      Error. Please check your credentials and try again.
+    </h1>
+  </md-toolbar>
+
+        <md-input-container align="center">
+            <label>Username</label>
+            <input name="username" ng-model="loginInfo.username" required/>
+            <div ng-messages="loginForm.username.$error" ng-if='loginForm.username.$dirty'>
+                <div ng-message="required">This is required.</div>
+            </div>
+        </md-input-container>
+
+        <md-input-container align="center">
+            <label>Password</label>
+            <input name="password" type="password" ng-model="loginInfo.password" required/>
+            <div ng-messages="loginForm.password.$error" ng-if='loginForm.password.$dirty'>
+                <div ng-message="required">This is required.</div>
+            </div>
+        </md-input-container>
+    </md-content>
+</fieldset>
+<md-button class="md-raised" class="md-primary btn btn-primary" ng-click="authenticate(loginInfo)" auto-focus>Login</md-button>
+
+        <p>By logging in, you agree Terms &amp; Privacy.</p>
+</body>
+</html>

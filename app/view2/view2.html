@@ -9,6 +9,15 @@
 <body ng-controller="View2Ctrl" >
     
        <fieldset id="fields-list">
+ <md-content class="md-padding">
+    <md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+      <md-nav-item md-nav-click="goto('#!/view1')" name="page1"><a style="text-decoration:none" href="#!/view1">Database</a></md-nav-item>
+      <md-nav-item md-nav-click="goto('view2')" name="page2"><a style="text-decoration:none" href="#!/view2">Web Service</md-nav-item>    
+      
+    </md-nav-bar>
+   
+  </md-content>
+
 
     <div ng-init="loadUserData()">
     <div class="pure-g entry" ng-repeat="input in inputs track by $index" >

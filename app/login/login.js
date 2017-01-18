@@ -38,7 +38,12 @@ App.config(['$routeProvider', function($routeProvider) {
 				  console.log('Getting User Data');
 				  console.log(response);
 				  console.log(response.password);
-				  if(response.password === loginInfo.password){
+				  var hashObj = new jsSHA("SHA-512", "TEXT", {numRounds: 1});
+                  hashObj.update(loginInfo.password);
+                  var hash = hashObj.getHash("HEX");
+                  var hashedPassword = hash;
+                  console.log(hashedPassword);
+				  if(response.password === hashedPassword){
 					  $scope.isLogged=true;
 					  defered.resolve($scope.isLogged);
 				  }else{

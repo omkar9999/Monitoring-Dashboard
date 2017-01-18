@@ -8,21 +8,53 @@ App.config(['$routeProvider', function($routeProvider) {
     controller: 'testCtrl'
   });
 }])
-.controller('testCtrl',['$scope','$window',
-  function($scope,$window) {
+.controller('testCtrl',['$scope','$window','$http','$q','$location',
+  function($scope,$window, $http,$q,$location) {
     console.log('testCtrl called');
      $scope.isLogged = false;
      $scope.loginError = false;
      $scope.authenticate = function(loginInfo){
-          if(loginInfo!==null&&loginInfo.username!==null&&loginInfo.username==='omkar.9999'&&loginInfo.password!==null&&loginInfo.password==='omkar123'){
-           console.log('Authenticated');
-              $window.location.href = '/#!/view2';
+          if(loginInfo!==null&&loginInfo.username!==null&&loginInfo.password!==null){
+			  console.log(loginInfo.username);
+              $scope.fetchUserDetails(loginInfo).then(function()  {
+				 console.log($scope.isLogged);
+				 if($scope.isLogged){
+				  console.log('Authenticated');
+			      //$window.location.href = '/#!/view2';
+                  $location.path('view2');				  
+				 }
+			  });
            }else{     
             $scope.loginError = true;
             console.log('Wrong Username');
            } 
 
      };
+	 
+	 $scope.fetchUserDetails = function(loginInfo){
+		 var defered = $q.defer()
+		 $http.get("http://localhost:8080/user/search/findByUserName?user="+loginInfo.username)
+			  .success(function(response)  {
+				  console.log('Getting User Data');
+				  console.log(response);
+				  console.log(response.password);
+				  if(response.password === loginInfo.password){
+					  $scope.isLogged=true;
+					  defered.resolve($scope.isLogged);
+				  }else{
+					  $scope.loginError = true;
+                      console.log('Wrong Password');
+					  $scope.isLogged=false;
+					  defered.resolve($scope.isLogged);
+				  }
+              }).error(function() {
+				console.log('Error in getting User Details')
+				$scope.isLogged=false; 
+                defered.resolve($scope.isLogged);                
+			  });    
+			  
+        return defered.promise;
+     }	 
 
 }
 ])

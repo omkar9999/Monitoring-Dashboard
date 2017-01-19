@@ -8,11 +8,12 @@ App.config(['$routeProvider', function($routeProvider) {
     controller: 'testCtrl'
   });
 }])
-.controller('testCtrl',['$scope','$window','$http','$q','$location',
-  function($scope,$window, $http,$q,$location) {
+.controller('testCtrl',['$scope','$window','$http','$q','$location','$rootScope',
+  function($scope,$window, $http,$q,$location,$rootScope) {
     console.log('testCtrl called');
      $scope.isLogged = false;
      $scope.loginError = false;
+	 $rootScope.userDetails;
      $scope.authenticate = function(loginInfo){
           if(loginInfo!==null&&loginInfo.username!==null&&loginInfo.password!==null){
 			  console.log(loginInfo.username);
@@ -37,6 +38,7 @@ App.config(['$routeProvider', function($routeProvider) {
 			  .success(function(response)  {
 				  console.log('Getting User Data');
 				  console.log(response);
+				  $rootScope.userDetails = response;
 				  console.log(response.password);
 				  var hashObj = new jsSHA("SHA-512", "TEXT", {numRounds: 1});
                   hashObj.update(loginInfo.password);

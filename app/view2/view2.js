@@ -7,8 +7,8 @@ App.config(['$routeProvider', function($routeProvider) {
     controller: 'View2Ctrl'
   });
 }])
-.controller('View2Ctrl', ['$scope','$http','$mdDialog',
-  function($scope, $http, $mdDialog) {
+.controller('View2Ctrl', ['$scope','$http','$mdDialog','$rootScope',
+  function($scope, $http, $mdDialog,$rootScope) {
     console.log('Ctrl2 called');
     $scope.loading=true;
     $scope.inputCounter = 0;   
@@ -39,29 +39,25 @@ console.log(data);
       $scope.inputs.push($scope.inputTemplate);
     };
  
-    $scope.loadUserData = function() {
-       $http.get("http://localhost:8080/user/5874961fca906070e195a750").success(function(response)  {
+    $scope.loadUserData = function() {       
        console.log('Initializing User Data');
-       console.log(response);
-       console.log(response.services);
-       $scope.inputs = response.services;   
-   }).error(function() {
-         console.log('error in getting User Details') })     
-
+       console.log($rootScope.userDetails);
+       console.log($rootScope.userDetails.services);
+       $scope.inputs = $rootScope.userDetails.services;
     };      
 
     $scope.save = function() {
-        console.log('Saved');
-         //var data=angular.toJson($scope.inputs); 
+        console.log('Saved');         
         var services = { services : $scope.inputs};
         var data =angular.toJson(services);
         console.log(data);
-var config = {headers: {'Content-Type': 'application/json'}};
-//TODO Change the below url get it from User self link
-$http.patch("http://localhost:8080/user/5874961fca906070e195a750",data,config).success(function(response) {
-      console.log(response.data);
+        var config = {headers: {'Content-Type': 'application/json'}};        
+        var userLink = $rootScope.userDetails._links.user.href;
+	    console.log(userLink);
+        $http.patch(userLink,data,config).success(function(response) {
+        console.log(response.data);
      
-    }).error(function() {
+       }).error(function() {
          console.log('error') })         
 
 };
@@ -76,9 +72,9 @@ $http.patch("http://localhost:8080/user/5874961fca906070e195a750",data,config).s
  };
 
     $scope.loading = function(url) {
-$scope.isLoading = true;
-//"http://services.groupkt.com/country/get/iso2code/IN"
-$http.get(url)
+    $scope.isLoading = true;
+
+    $http.get(url)
     .success(function(response) {
       $scope.data = response.data;
      
@@ -86,7 +82,7 @@ $http.get(url)
          console.log('error');
          $scope.isLoading=false;
          $mdDialog.show(
-      $mdDialog.alert()
+         $mdDialog.alert()
         .parent(angular.element(document.querySelector('#popupContainer')))
         .clickOutsideToClose(true)
         .title('Test Result')
@@ -101,7 +97,7 @@ $http.get(url)
     }).then(function(response) {
      $scope.data = response.data;
           console.log($scope.data);
-$mdDialog.show(
+     $mdDialog.show(
       $mdDialog.alert()
         .parent(angular.element(document.querySelector('#popupContainer')))
         .clickOutsideToClose(true)

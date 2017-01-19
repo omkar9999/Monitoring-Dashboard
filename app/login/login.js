@@ -55,6 +55,7 @@ App.config(['$routeProvider', function($routeProvider) {
 					  defered.resolve($scope.isLogged);
 				  }
               }).error(function() {
+				$scope.loginError = true;
 				console.log('Error in getting User Details')
 				$scope.isLogged=false; 
                 defered.resolve($scope.isLogged);                
